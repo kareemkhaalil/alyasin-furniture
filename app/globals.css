@@ -1,0 +1,109 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@layer base {
+  :root {
+    --background: 40 20% 97%;
+    --foreground: 30 10% 10%;
+    --card: 40 25% 95%;
+    --card-foreground: 30 10% 10%;
+    --popover: 40 25% 95%;
+    --popover-foreground: 30 10% 10%;
+    --primary: 30 15% 15%;
+    --primary-foreground: 40 20% 97%;
+    --secondary: 35 30% 88%;
+    --secondary-foreground: 30 15% 15%;
+    --muted: 35 20% 92%;
+    --muted-foreground: 30 10% 45%;
+    --accent: 25 60% 45%;
+    --accent-foreground: 40 20% 97%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 35 15% 85%;
+    --input: 35 15% 85%;
+    --ring: 25 60% 45%;
+    --chart-1: 25 60% 45%;
+    --chart-2: 35 40% 50%;
+    --chart-3: 30 30% 35%;
+    --chart-4: 40 50% 60%;
+    --chart-5: 20 70% 55%;
+    --radius: 0.5rem;
+    --sidebar-background: 40 20% 95%;
+    --sidebar-foreground: 30 10% 25%;
+    --sidebar-primary: 30 15% 15%;
+    --sidebar-primary-foreground: 40 20% 97%;
+    --sidebar-accent: 35 25% 90%;
+    --sidebar-accent-foreground: 30 15% 15%;
+    --sidebar-border: 35 15% 85%;
+    --sidebar-ring: 25 60% 45%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Safe area utilities for mobile devices */
+@layer utilities {
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 0.5rem);
+  }
+  
+  .mb-mobile-nav {
+    margin-bottom: 5rem;
+  }
+  
+  @media (min-width: 768px) {
+    .mb-mobile-nav {
+      margin-bottom: 0;
+    }
+  }
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Better touch targets on mobile */
+@media (max-width: 767px) {
+  button, a {
+    min-height: 44px;
+  }
+}
+
+/* PWA standalone mode adjustments */
+@media (display-mode: standalone) {
+  body {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  
+  /* Allow text selection in specific areas */
+  p, span, h1, h2, h3, h4, h5, h6 {
+    -webkit-user-select: text;
+    user-select: text;
+  }
+}
+
+/* Hide scrollbar for horizontal scroll */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
