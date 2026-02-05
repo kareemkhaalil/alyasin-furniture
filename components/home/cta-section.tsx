@@ -1,8 +1,13 @@
+'use client'
+
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Phone, MessageCircle } from 'lucide-react'
+import { useAdmin } from '@/lib/admin-context'
 
 export function CTASection() {
+  const { siteSettings } = useAdmin()
+  
   return (
     <section className="py-20 bg-primary text-primary-foreground">
       <div className="container mx-auto px-4">
@@ -29,7 +34,7 @@ export function CTASection() {
               className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 text-lg px-8 bg-transparent"
             >
               <a
-                href="https://wa.me/966501234567"
+                href={`https://wa.me/${siteSettings.whatsapp}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >

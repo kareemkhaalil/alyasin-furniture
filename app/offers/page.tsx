@@ -1,10 +1,12 @@
+'use client'
+
 import Link from 'next/link'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { MessageCircle, Calendar, Tag } from 'lucide-react'
-import { offers } from '@/lib/data'
+import { useAdmin } from '@/lib/admin-context'
 
 function formatDate(dateString: string) {
   const date = new Date(dateString)
@@ -16,6 +18,8 @@ function formatDate(dateString: string) {
 }
 
 export default function OffersPage() {
+  const { offers, siteSettings } = useAdmin()
+  
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -65,7 +69,7 @@ export default function OffersPage() {
                     <div className="flex flex-col sm:flex-row gap-3 pt-4">
                       <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90 flex-1">
                         <a
-                          href={`https://wa.me/966501234567?text=${encodeURIComponent(`مرحباً، أود الاستفسار عن عرض: ${offer.title}`)}`}
+                          href={`https://wa.me/${siteSettings.whatsapp}?text=${encodeURIComponent(`مرحباً، أود الاستفسار عن عرض: ${offer.title}`)}`}
                           target="_blank"
                           rel="noopener noreferrer"
                         >
@@ -95,7 +99,7 @@ export default function OffersPage() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
-                  <a href="https://wa.me/966501234567" target="_blank" rel="noopener noreferrer">
+                  <a href={`https://wa.me/${siteSettings.whatsapp}`} target="_blank" rel="noopener noreferrer">
                     <MessageCircle className="ml-2 h-5 w-5" />
                     تواصل عبر واتساب
                   </a>

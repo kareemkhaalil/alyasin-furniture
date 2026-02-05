@@ -39,6 +39,8 @@ export default function AdminProjectsPage() {
     videoLinks: [] as string[],
     status: "available" as Project["status"],
     category: "",
+    price: undefined as number | undefined,
+    discountPercentage: undefined as number | undefined,
   })
 
   useEffect(() => {
@@ -55,6 +57,8 @@ export default function AdminProjectsPage() {
       videoLinks: [],
       status: "available",
       category: "",
+      price: undefined,
+      discountPercentage: undefined,
     })
     setEditingProject(null)
     setNewImageUrl("")
@@ -67,9 +71,11 @@ export default function AdminProjectsPage() {
       title: project.title,
       description: project.description,
       images: project.images,
-      videoLinks: (project as any).videoLinks || [],
+      videoLinks: project.videoLinks || [],
       status: project.status,
       category: project.category,
+      price: project.price,
+      discountPercentage: project.discountPercentage,
     })
     setIsDialogOpen(true)
   }
@@ -233,6 +239,45 @@ export default function AdminProjectsPage() {
                 </div>
               </div>
 
+              {/* Price and Discount Section */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="price">السعر (ر.س) - اختياري</Label>
+                  <Input
+                    id="price"
+                    type="number"
+                    value={formData.price || ""}
+                    onChange={(e) => setFormData(prev => ({ 
+                      ...prev, 
+                      price: e.target.value ? Number(e.target.value) : undefined 
+                    }))}
+                    placeholder="مثال: 5000"
+                    min="0"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="discount">نسبة الخصم (%) - اختياري</Label>
+                  <Input
+                    id="discount"
+                    type="number"
+                    value={formData.discountPercentage || ""}
+                    onChange={(e) => setFormData(prev => ({ 
+                      ...prev, 
+                      discountPercentage: e.target.value ? Number(e.target.value) : undefined 
+                    }))}
+                    placeholder="مثال: 20"
+                    min="0"
+                    max="100"
+                  />
+                  {formData.price && formData.discountPercentage ? (
+                    <p className="text-xs text-muted-foreground">
+                      السعر بعد الخصم: {Math.round(formData.price * (1 - formData.discountPercentage / 100)).toLocaleString('ar-SA')} ر.س
+                    </p>
+                  ) : null}
+                </div>
+              </div>
+
               {/* Images Section */}
               <div className="space-y-3">
                 <Label>الصور</Label>
@@ -353,9 +398,30 @@ export default function AdminProjectsPage() {
                 <p className="text-xs text-muted-foreground">{project.category}</p>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-muted-foreground line-clamp-2 mb-4">
+                <p className="text-sm text-muted-foreground line-clamp-2 mb-2">
                   {project.description}
                 </p>
+                {project.price && (
+                  <div className="mb-4">
+                    {project.discountPercentage ? (
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm line-through text-muted-foreground">
+                          {project.price.toLocaleString('ar-SA')} ر.س
+                        </span>
+                        <span className="text-sm font-bold text-accent">
+                          {Math.round(project.price * (1 - project.discountPercentage / 100)).toLocaleString('ar-SA')} ر.س
+                        </span>
+                        <span className="text-xs bg-red-100 text-red-700 px-1.5 py-0.5 rounded">
+                          -{project.discountPercentage}%
+                        </span>
+                      </div>
+                    ) : (
+                      <span className="text-sm font-bold text-foreground">
+                        {project.price.toLocaleString('ar-SA')} ر.س
+                      </span>
+                    )}
+                  </div>
+                )}
                 <div className="flex gap-2">
                   <Button
                     variant="outline"

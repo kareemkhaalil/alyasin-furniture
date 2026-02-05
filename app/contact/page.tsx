@@ -10,8 +10,10 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { Phone, Mail, MapPin, Clock, MessageCircle, Send } from 'lucide-react'
+import { useAdmin } from '@/lib/admin-context'
 
 export default function ContactPage() {
+  const { siteSettings } = useAdmin()
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -29,7 +31,7 @@ ${formData.email ? `البريد الإلكتروني: ${formData.email}` : ''}
 الرسالة:
 ${formData.message}`
     
-    window.open(`https://wa.me/966501234567?text=${encodeURIComponent(message)}`, '_blank')
+    window.open(`https://wa.me/${siteSettings.whatsapp}?text=${encodeURIComponent(message)}`, '_blank')
   }
 
   return (
@@ -121,8 +123,7 @@ ${formData.message}`
                       </div>
                       <div>
                         <h3 className="font-semibold text-foreground mb-1">الهاتف</h3>
-                        <p className="text-muted-foreground">+966 50 123 4567</p>
-                        <p className="text-muted-foreground">+966 11 234 5678</p>
+                        <p className="text-muted-foreground">{siteSettings.phone}</p>
                       </div>
                     </div>
                     <div className="flex gap-4 items-start">
@@ -131,8 +132,7 @@ ${formData.message}`
                       </div>
                       <div>
                         <h3 className="font-semibold text-foreground mb-1">البريد الإلكتروني</h3>
-                        <p className="text-muted-foreground">info@dar-furniture.com</p>
-                        <p className="text-muted-foreground">sales@dar-furniture.com</p>
+                        <p className="text-muted-foreground">{siteSettings.email}</p>
                       </div>
                     </div>
                     <div className="flex gap-4 items-start">
@@ -141,9 +141,7 @@ ${formData.message}`
                       </div>
                       <div>
                         <h3 className="font-semibold text-foreground mb-1">العنوان</h3>
-                        <p className="text-muted-foreground">طريق الملك عبدالله</p>
-                        <p className="text-muted-foreground">حي العليا، الرياض</p>
-                        <p className="text-muted-foreground">المملكة العربية السعودية</p>
+                        <p className="text-muted-foreground">{siteSettings.address}</p>
                       </div>
                     </div>
                     <div className="flex gap-4 items-start">
@@ -152,8 +150,8 @@ ${formData.message}`
                       </div>
                       <div>
                         <h3 className="font-semibold text-foreground mb-1">ساعات العمل</h3>
-                        <p className="text-muted-foreground">السبت - الخميس: 9:00 ص - 10:00 م</p>
-                        <p className="text-muted-foreground">الجمعة: 4:00 م - 10:00 م</p>
+                        <p className="text-muted-foreground">السبت - الخميس: {siteSettings.workingHours.weekdays}</p>
+                        <p className="text-muted-foreground">الجمعة: {siteSettings.workingHours.weekends}</p>
                       </div>
                     </div>
                   </div>
@@ -171,7 +169,7 @@ ${formData.message}`
                     </div>
                   </div>
                   <Button asChild size="lg" className="w-full bg-green-600 hover:bg-green-700 text-white">
-                    <a href="https://wa.me/966501234567" target="_blank" rel="noopener noreferrer">
+                    <a href={`https://wa.me/${siteSettings.whatsapp}`} target="_blank" rel="noopener noreferrer">
                       <MessageCircle className="ml-2 h-5 w-5" />
                       تواصل عبر واتساب
                     </a>

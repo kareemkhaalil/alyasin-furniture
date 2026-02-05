@@ -65,6 +65,7 @@ const ADMIN_PASSWORD = 'admin123' // In production, use proper auth
 export function AdminProvider({ children }: { children: ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
+  const [isMounted, setIsMounted] = useState(false)
   const [projects, setProjects] = useState<Project[]>(initialProjects)
   const [products, setProducts] = useState<Product[]>(initialProducts)
   const [offers, setOffers] = useState<Offer[]>(initialOffers)
@@ -74,7 +75,6 @@ export function AdminProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const saved = localStorage.getItem('admin_auth')
     if (saved === 'true') setIsAuthenticated(true)
-    setIsLoading(false)
     
     const savedProjects = localStorage.getItem('projects')
     if (savedProjects) setProjects(JSON.parse(savedProjects))
@@ -87,24 +87,79 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     
     const savedSettings = localStorage.getItem('siteSettings')
     if (savedSettings) setSiteSettings(JSON.parse(savedSettings))
+    
+    setIsLoading(false)
+    setIsMounted(true)
   }, [])
 
-  // Save to localStorage on changes
+  // Save to localStorage on changes (only after initial mount to prevent overwriting)
   useEffect(() => {
-    localStorage.setItem('projects', JSON.stringify(projects))
-  }, [projects])
+    if (isMounted) {
+      localStorage.setItem('projects', JSON.stringify(projects))
+    }
+  }, [projects, isMounted])
 
   useEffect(() => {
-    localStorage.setItem('products', JSON.stringify(products))
-  }, [products])
+    if (isMounted) {
+      localStorage.setItem('products', JSON.stringify(products))
+    }
+  }, [products, isMounted])
 
   useEffect(() => {
-    localStorage.setItem('offers', JSON.stringify(offers))
-  }, [offers])
+    if (isMounted) {
+      localStorage.setItem('offers', JSON.stringify(offers))
+    }
+  }, [offers, isMounted])
 
   useEffect(() => {
-    localStorage.setItem('siteSettings', JSON.stringify(siteSettings))
-  }, [siteSettings])
+    if (isMounted) {
+      localStorage.setItem('siteSettings', JSON.stringify(siteSettings))
+    }
+    
+    // Apply colors to CSS variables
+    if (typeof document !== 'undefined') {
+      const root = document.documentElement
+      
+      // Convert hex to HSL for CSS variables
+      const hexToHSL = (hex: string) => {
+        const r = parseInt(hex.slice(1, 3), 16) / 255
+        const g = parseInt(hex.slice(3, 5), 16) / 255
+        const b = parseInt(hex.slice(5, 7), 16) / 255
+
+        const max = Math.max(r, g, b)
+        const min = Math.min(r, g, b)
+        let h = 0
+        let s = 0
+        const l = (max + min) / 2
+
+        if (max !== min) {
+          const d = max - min
+          s = l > 0.5 ? d / (2 - max - min) : d / (max + min)
+          switch (max) {
+            case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break
+            case g: h = ((b - r) / d + 2) / 6; break
+            case b: h = ((r - g) / d + 4) / 6; break
+          }
+        }
+
+        return `${Math.round(h * 360)} ${Math.round(s * 100)}% ${Math.round(l * 100)}%`
+      }
+
+      // Apply primary color
+      if (siteSettings.primaryColor) {
+        const primaryHSL = hexToHSL(siteSettings.primaryColor)
+        root.style.setProperty('--primary', primaryHSL)
+        root.style.setProperty('--primary-foreground', '30 10% 96%')
+      }
+      
+      // Apply accent color
+      if (siteSettings.accentColor) {
+        const accentHSL = hexToHSL(siteSettings.accentColor)
+        root.style.setProperty('--accent', accentHSL)
+        root.style.setProperty('--accent-foreground', '30 10% 96%')
+      }
+    }
+  }, [siteSettings, isMounted])
 
   const login = (password: string) => {
     if (password === ADMIN_PASSWORD) {

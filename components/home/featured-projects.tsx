@@ -1,8 +1,10 @@
+'use client'
+
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { ArrowLeft } from 'lucide-react'
-import { projects } from '@/lib/data'
+import { useAdmin } from '@/lib/admin-context'
 
 const statusConfig = {
   available: { label: 'متوفر', className: 'bg-green-100 text-green-800' },
@@ -11,6 +13,7 @@ const statusConfig = {
 }
 
 export function FeaturedProjects() {
+  const { projects } = useAdmin()
   const featuredProjects = projects.slice(0, 3)
 
   return (
@@ -56,6 +59,27 @@ export function FeaturedProjects() {
                   {project.title}
                 </h3>
                 <p className="text-muted-foreground line-clamp-2">{project.description}</p>
+                {project.price && (
+                  <div className="pt-1">
+                    {project.discountPercentage ? (
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="text-sm line-through text-muted-foreground">
+                          {project.price.toLocaleString('ar-SA')} ر.س
+                        </span>
+                        <span className="text-lg font-bold text-accent">
+                          {Math.round(project.price * (1 - project.discountPercentage / 100)).toLocaleString('ar-SA')} ر.س
+                        </span>
+                        <span className="text-xs bg-red-500 text-white px-2 py-0.5 rounded-full">
+                          -{project.discountPercentage}%
+                        </span>
+                      </div>
+                    ) : (
+                      <span className="text-lg font-bold text-foreground">
+                        {project.price.toLocaleString('ar-SA')} ر.س
+                      </span>
+                    )}
+                  </div>
+                )}
               </div>
             </Link>
           ))}

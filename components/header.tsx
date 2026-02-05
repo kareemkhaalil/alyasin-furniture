@@ -2,23 +2,27 @@
 
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import { useAdmin } from '@/lib/admin-context'
 
 const navLinks = [
   { href: '/', label: 'الرئيسية' },
+  { href: '/offers', label: 'عروض اليوم' },
+
   { href: '/projects', label: 'المشاريع' },
   { href: '/products', label: 'المنتجات' },
-  { href: '/offers', label: 'العروض' },
   { href: '/contact', label: 'تواصل معنا' },
 ]
 
 export function Header() {
+  const { siteSettings } = useAdmin()
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto px-4">
         <div className="flex h-16 md:h-20 items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <span className="text-xl md:text-2xl font-bold text-foreground">دار الأثاث</span>
+            <span className="text-xl md:text-2xl font-bold text-foreground">{siteSettings.siteName}</span>
           </Link>
 
           {/* Desktop Navigation */}

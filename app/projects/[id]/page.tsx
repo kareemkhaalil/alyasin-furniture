@@ -8,7 +8,7 @@ import { Footer } from '@/components/footer'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { ArrowRight, MessageCircle, ChevronLeft, ChevronRight } from 'lucide-react'
-import { projects } from '@/lib/data'
+import { useAdmin } from '@/lib/admin-context'
 
 const statusConfig = {
   available: { label: 'متوفر', className: 'bg-green-100 text-green-800' },
@@ -17,6 +17,7 @@ const statusConfig = {
 }
 
 export default function ProjectDetailPage() {
+  const { projects, siteSettings } = useAdmin()
   const params = useParams()
   const project = projects.find(p => p.id === params.id)
   const [currentImage, setCurrentImage] = useState(0)
@@ -130,6 +131,40 @@ export default function ProjectDetailPage() {
                   {project.description}
                 </p>
 
+                {/* Price Display */}
+                {project.price && (
+                  <div className="bg-secondary/50 rounded-2xl p-6">
+                    {project.discountPercentage ? (
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm text-muted-foreground">السعر الأصلي:</span>
+                          <span className="text-lg line-through text-muted-foreground">
+                            {project.price.toLocaleString('ar-SA')} ر.س
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <span className="text-3xl font-bold text-accent">
+                            {Math.round(project.price * (1 - project.discountPercentage / 100)).toLocaleString('ar-SA')} ر.س
+                          </span>
+                          <span className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+                            خصم {project.discountPercentage}%
+                          </span>
+                        </div>
+                        <p className="text-sm text-green-600 font-medium">
+                          وفر {Math.round(project.price * project.discountPercentage / 100).toLocaleString('ar-SA')} ر.س
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm text-muted-foreground">السعر:</span>
+                        <span className="text-3xl font-bold text-foreground">
+                          {project.price.toLocaleString('ar-SA')} ر.س
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                )}
+
                 <div className="border-t border-border pt-6 space-y-4">
                   <h3 className="text-lg font-semibold text-foreground">تفاصيل المشروع</h3>
                   <div className="grid grid-cols-2 gap-4">
@@ -146,7 +181,7 @@ export default function ProjectDetailPage() {
 
                 <div className="flex flex-col sm:flex-row gap-4 pt-4">
                   <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
-                    <a href="https://wa.me/966501234567" target="_blank" rel="noopener noreferrer">
+                    <a href={`https://wa.me/${siteSettings.whatsapp}`} target="_blank" rel="noopener noreferrer">
                       <MessageCircle className="ml-2 h-5 w-5" />
                       استفسار عبر واتساب
                     </a>

@@ -6,6 +6,10 @@ export interface Project {
   images: string[]
   status: 'available' | 'sold' | 'reserved'
   category: string
+  // Optional pricing fields
+  price?: number // Original price in SAR
+  discountPercentage?: number // Discount percentage (0-100)
+  videoLinks?: string[]
 }
 
 export interface Product {

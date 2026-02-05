@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useAdmin } from "@/lib/admin-context"
 import { AdminWrapper } from "@/components/admin/admin-wrapper"
 import { Button } from "@/components/ui/button"
@@ -15,6 +15,11 @@ export default function AdminSettingsPage() {
   const { siteSettings, updateSiteSettings } = useAdmin()
   const [formData, setFormData] = useState(siteSettings)
   const [saved, setSaved] = useState(false)
+
+  // Sync formData when siteSettings changes (e.g., loaded from localStorage)
+  useEffect(() => {
+    setFormData(siteSettings)
+  }, [siteSettings])
 
   const handleSave = () => {
     updateSiteSettings(formData)

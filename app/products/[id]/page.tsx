@@ -7,9 +7,10 @@ import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { Button } from '@/components/ui/button'
 import { ArrowRight, MessageCircle, ChevronLeft, ChevronRight, Ruler, Layers } from 'lucide-react'
-import { products } from '@/lib/data'
+import { useAdmin } from '@/lib/admin-context'
 
 export default function ProductDetailPage() {
+  const { products, siteSettings } = useAdmin()
   const params = useParams()
   const product = products.find(p => p.id === params.id)
   const [currentImage, setCurrentImage] = useState(0)
@@ -184,7 +185,7 @@ export default function ProductDetailPage() {
                     className="w-full bg-green-600 hover:bg-green-700 text-white text-lg"
                   >
                     <a
-                      href={`https://wa.me/966501234567?text=${generateWhatsAppMessage()}`}
+                      href={`https://wa.me/${siteSettings.whatsapp}?text=${generateWhatsAppMessage()}`}
                       target="_blank"
                       rel="noopener noreferrer"
                     >

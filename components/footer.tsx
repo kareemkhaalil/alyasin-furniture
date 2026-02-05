@@ -1,16 +1,21 @@
+'use client'
+
 import Link from 'next/link'
 import { Phone, Mail, MapPin, Clock } from 'lucide-react'
+import { useAdmin } from '@/lib/admin-context'
 
 export function Footer() {
+  const { siteSettings } = useAdmin()
+  
   return (
     <footer className="bg-primary text-primary-foreground mb-mobile-nav">
       <div className="container mx-auto px-4 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="space-y-4">
-            <h3 className="text-2xl font-bold">دار الأثاث</h3>
+            <h3 className="text-2xl font-bold">{siteSettings.siteName}</h3>
             <p className="text-primary-foreground/80 leading-relaxed">
-              معرض متخصص في الأثاث العربي الفاخر والتصاميم العصرية. نقدم لكم أجود أنواع الأثاث بأسعار منافسة.
+              {siteSettings.siteDescription}
             </p>
           </div>
 
@@ -42,15 +47,15 @@ export function Footer() {
             <div className="space-y-3">
               <div className="flex items-center gap-3">
                 <Phone className="h-5 w-5 text-accent" />
-                <span className="text-primary-foreground/80">+966 50 123 4567</span>
+                <span className="text-primary-foreground/80">{siteSettings.phone}</span>
               </div>
               <div className="flex items-center gap-3">
                 <Mail className="h-5 w-5 text-accent" />
-                <span className="text-primary-foreground/80">info@dar-furniture.com</span>
+                <span className="text-primary-foreground/80">{siteSettings.email}</span>
               </div>
               <div className="flex items-center gap-3">
                 <MapPin className="h-5 w-5 text-accent" />
-                <span className="text-primary-foreground/80">الرياض، المملكة العربية السعودية</span>
+                <span className="text-primary-foreground/80">{siteSettings.address}</span>
               </div>
             </div>
           </div>
@@ -63,14 +68,14 @@ export function Footer() {
                 <Clock className="h-5 w-5 text-accent" />
                 <div>
                   <p className="text-primary-foreground/80">السبت - الخميس</p>
-                  <p className="text-primary-foreground/80">9:00 ص - 10:00 م</p>
+                  <p className="text-primary-foreground/80">{siteSettings.workingHours.weekdays}</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
                 <Clock className="h-5 w-5 text-accent" />
                 <div>
                   <p className="text-primary-foreground/80">الجمعة</p>
-                  <p className="text-primary-foreground/80">4:00 م - 10:00 م</p>
+                  <p className="text-primary-foreground/80">{siteSettings.workingHours.weekends}</p>
                 </div>
               </div>
             </div>
@@ -79,7 +84,7 @@ export function Footer() {
 
         <div className="border-t border-primary-foreground/20 mt-12 pt-8 text-center">
           <p className="text-primary-foreground/60">
-            جميع الحقوق محفوظة © {new Date().getFullYear()} دار الأثاث
+            جميع الحقوق محفوظة © {new Date().getFullYear()} {siteSettings.siteName}
           </p>
         </div>
       </div>

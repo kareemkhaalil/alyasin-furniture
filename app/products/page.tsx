@@ -5,9 +5,11 @@ import Link from 'next/link'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { Button } from '@/components/ui/button'
-import { products, productCategories } from '@/lib/data'
+import { useAdmin } from '@/lib/admin-context'
+import { productCategories } from '@/lib/data'
 
 export default function ProductsPage() {
+  const { products } = useAdmin()
   const [activeCategory, setActiveCategory] = useState('الكل')
 
   const filteredProducts = activeCategory === 'الكل'

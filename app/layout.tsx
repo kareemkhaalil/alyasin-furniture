@@ -3,6 +3,8 @@ import type { Metadata, Viewport } from 'next'
 import { Cairo } from 'next/font/google'
 import { MobileNav } from '@/components/mobile-nav'
 import { PWARegister } from '@/components/pwa-register'
+import { AdminProvider } from '@/lib/admin-context'
+import { ChatWidget } from '@/components/chat-widget'
 
 import './globals.css'
 
@@ -42,9 +44,12 @@ export default function RootLayout({
   return (
     <html lang="ar" dir="rtl">
       <body className={`${cairo.className} antialiased`}>
-        {children}
-        <MobileNav />
-        <PWARegister />
+        <AdminProvider>
+          {children}
+          <MobileNav />
+          <ChatWidget />
+          <PWARegister />
+        </AdminProvider>
       </body>
     </html>
   )

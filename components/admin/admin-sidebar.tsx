@@ -14,7 +14,8 @@ import {
   LogOut,
   Home,
   Menu,
-  X
+  X,
+  MessageCircle
 } from "lucide-react"
 import { useState } from "react"
 
@@ -23,6 +24,7 @@ const navItems = [
   { href: "/admin/projects", label: "المشاريع", icon: FolderKanban },
   { href: "/admin/products", label: "المنتجات", icon: Package },
   { href: "/admin/offers", label: "العروض", icon: Tag },
+  { href: "/admin/chat", label: "المحادثات", icon: MessageCircle },
   { href: "/admin/settings", label: "إعدادات الموقع", icon: Settings },
 ]
 

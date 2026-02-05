@@ -1,9 +1,12 @@
+'use client'
+
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft } from 'lucide-react'
-import { products } from '@/lib/data'
+import { useAdmin } from '@/lib/admin-context'
 
 export function FeaturedProducts() {
+  const { products } = useAdmin()
   const featuredProducts = products.slice(0, 4)
 
   return (
